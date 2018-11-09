@@ -1,35 +1,36 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import {connect} from 'react-redux';
+import { removeTodo } from '../../redux/actions';
 
 class Todo extends Component {
 
     
-    handleDelete = i => {
+    handleDelete = id => {
         if(window.confirm('Are you sure you want to delete it?')){
-            this.props.onRemoveTodo(i)
+            this.props.removeTodo(id)
         }
     }
 
     
     render() {
-        // console.log(this.props.todo)
-        const todos = this.props.todo.map((todo, i) =>{
-            const {title,description,priority,responsible} = todo
+        const result = this.props.todos.map((todo, id) =>{
+            const {title,priority,description,responsible} = todo
             return(
-                <div className="col-4 mt-2"  key={i}>
+                <div className="col-md-4 col-sm-6 col-xs-12 mt-2 mb-5"  key={id}>
                     <div className="card text-center" >
                         <div className="card-header">
                             <h3>{title}</h3>
                             <span className="badge badge-pill badge-danger ml-2">
-                                {priority}
+                                { priority}
                             </span>
                         </div>
                         <div className="card-body" >
-                            <p>{description}</p>
-                            <p><mark>{responsible}</mark></p>
+                            <p>{ description}</p>
+                            <p><mark>{ responsible}</mark></p>
                         </div>
                         <div className="card-footer" >
-                            <button className="btn btn-danger" onClick={this.handleDelete.bind(this,i)} >
+                            <button className="btn btn-danger" onClick={this.handleDelete.bind(this,id)} >
                                 Delete
                             </button>
                         </div>
@@ -39,19 +40,28 @@ class Todo extends Component {
         })
         return (
             <div>
-                <div className="container" >
-                    <div className="row mt-4">
-                        {todos}
-                    </div>
+                <div className="row mt-4">
+                    {result}
                 </div>
-                
             </div>
         );
     }
 }
 
 Todo.propTypes = {
-    todo: PropTypes.array.isRequired,
+    todos: PropTypes.array.isRequired,
 };
 
-export default Todo;
+const mapStateToProps = (state) => {
+    return {
+         todos: state.todos
+    }    
+ }
+
+const mapDispatchToProps = dispatch => (
+    {
+        removeTodo: value => dispatch(removeTodo(value))
+    }
+)
+
+export default connect(mapStateToProps,mapDispatchToProps)(Todo);

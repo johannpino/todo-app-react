@@ -1,29 +1,32 @@
 import React, { Component } from 'react';
-// import PropTypes from 'prop-types';
+import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
+import {addTodo} from './../../redux/actions'
 
 class TodoForm extends Component {
 
-    constructor(){
-        super()
-        this.state = {
-            title: '',
-            responsible: '',
-            description: '',
-            priority: 'low'
-        }
-    }
-
-    handleInput = e => {
-        const { value, name } = e.target
-        this.setState({
-            [name]: value
-        })
-    }
-
     handleSubmit = e => {
-        e.preventDefault()
-        this.props.onAddTodo(this.state)
-        console.log('enviando datos');
+        e.preventDefault()      
+        const dato = {
+            title: e.target.title.value,
+            description: e.target.description.value,
+            responsible: e.target.responsible.value,
+            priority: e.target.priority.value
+        }
+
+        if(e.target.title.value === ''){
+            e.target.title.focus()
+        }else if(e.target.responsible.value === ''){
+            e.target.responsible.focus()
+        }
+        else if(e.target.description.value === ''){
+            e.target.description.focus()
+        }
+        else{
+            this.props.onAddTodo(dato)
+            e.target.reset()
+        }
+        
     }
 
     render() {
@@ -35,16 +38,16 @@ class TodoForm extends Component {
                     </div>
                     <form className="card-body" onSubmit={this.handleSubmit}>
                         <div className="form-group">
-                            <input type="text" name="title" onChange={this.handleInput} className="form-control" placeholder="Title" />
+                            <input type="text" name="title" className="form-control" placeholder="Title" />
                         </div>
                         <div className="form-group">
-                            <input type="text" name="responsible" onChange={this.handleInput} className="form-control" placeholder="Responsible" />
+                            <input type="text" name="responsible" className="form-control" placeholder="Responsible" />
                         </div>
                         <div className="form-group">
-                            <input type="text" name="description" onChange={this.handleInput} className="form-control" placeholder="Description" />
+                            <input type="text" name="description" className="form-control" placeholder="Description" />
                         </div>
                         <div className="form-group">
-                            <select className="form-control" name="priority" onChange={this.handleInput}>
+                            <select className="form-control" name="priority">
                                 <option value="low">
                                     Low
                                 </option>
@@ -70,7 +73,14 @@ class TodoForm extends Component {
 }
 
 TodoForm.propTypes = {
-
+    onAddTodo: PropTypes.func.isRequired,
 };
 
-export default TodoForm;
+
+const mapDispatchToProps = dispatch => (
+    {
+         onAddTodo: add => dispatch(addTodo(add))
+    }
+)
+
+export default connect(null,mapDispatchToProps)(TodoForm);

@@ -3,3 +3,15 @@ body {
   padding: 0;
   
 }
+
+.footer{
+  position: fixed;
+  bottom: 0%;
+  background: #333;
+  color: #fff;
+  width: 100%;
+}
+.footer p{
+  margin: 0;
+  padding: 10px;
+}

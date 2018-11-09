@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
 
 class Navigation extends Component {
     render() {
@@ -7,7 +8,7 @@ class Navigation extends Component {
                 <nav className="navbar navbar-dark bg-dark">
                     <h2 className="text-white" >{this.props.title}
                     <span className="badge badge-pill badge-light ml-2">
-                        {this.props.todoLenght}
+                        {this.props.todos.length}
                     </span>
                     </h2>
                     
@@ -17,4 +18,11 @@ class Navigation extends Component {
     }
 }
 
-export default Navigation;
+const mapStateToProps = (state) => {
+    return {
+         todos: state.todos
+    }
+ }
+ 
+
+export default connect(mapStateToProps,null)(Navigation);
